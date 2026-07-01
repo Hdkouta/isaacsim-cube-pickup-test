@@ -1,0 +1,108 @@
+# Isaac Sim ShadowHand cube pickup test
+
+Scripts for driving a ShadowHand cube grasp scene in Isaac Sim from VS Code.
+
+The current control is scripted teacher-data generation, not direct pi0 control. The scripts save RGB camera observations, scene state, and actions so the run can be converted into imitation-learning / pi0 fine-tuning data.
+
+## Paths used on the Isaac Sim machine
+
+```powershell
+C:\isaacsim\python.bat
+C:\VScode\Yoshida_script
+C:\robot_assets\shadow_hand_initial.json
+```
+
+Teacher data is written to:
+
+```text
+C:\VScode\Yoshida_script\teacher_data\<run_id>\
+```
+
+Camera snapshots are written to:
+
+```text
+C:\VScode\Yoshida_script\camera\<timestamp>\
+```
+
+## Setup
+
+1. Open Isaac Sim and load the ShadowHand + Cube scene.
+2. Run `isaac_vscode_bridge.py` once in the Isaac Sim Script Editor.
+3. Copy this repository's `.py` files into:
+
+```text
+C:\VScode\Yoshida_script
+```
+
+4. From VS Code PowerShell, send scripts to Isaac Sim with:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu2.py
+```
+
+## Normal execution order
+
+Run while stopped:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu1.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu2.py
+```
+
+Then in Isaac Sim: `File > Save`, then press `Play`.
+
+Run after Play:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu3.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4a.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4b.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4c.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu5a.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu5b.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu5c.py
+```
+
+Optional camera-only capture:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu6.py
+```
+
+## Script roles
+
+| File | Role |
+| --- | --- |
+| `isaac_vscode_bridge.py` | Run once in Isaac Sim Script Editor. Opens localhost bridge. |
+| `send_to_isaac.py` | VS Code-side sender. |
+| `scripu1.py` | Save current hand/cube pose, cube scale, size, mass, and table height. |
+| `scripu2.py` | Restore saved state, define common helpers, initialize cameras, start teacher-data run. |
+| `scripu3.py` | Read-only status check. |
+| `scripu4a.py` | Approach: open hand and move to saved initial pose offset. |
+| `scripu4b.py` | Weak preshape + thumb/middle contact. |
+| `scripu4c.py` | Weak support-finger contact + final light contact. |
+| `scripu5a.py` | Wrist lock + weak hold. |
+| `scripu5b.py` | Small lift steps, recording teacher data per step. |
+| `scripu5c.py` | Return hand to saved initial pose. |
+| `scripu6.py` | Save all camera images. |
+
+## pi0 fine-tuning target
+
+The current pi0 placeholder output (`vx`, `vy`, `vz`, `gripper`) is not enough for ShadowHand. The target action schema should include phase, ShadowHand joint targets, and optional hand pose delta:
+
+```json
+{
+  "phase": "thumb_middle_contact",
+  "joint_targets": {
+    "MFJ3": 22,
+    "MFJ2": 30,
+    "THJ4": 30,
+    "THJ3": 34
+  },
+  "hand_delta": [0.0, 0.0, -0.002],
+  "wait_steps": 60
+}
+```
+
+Use the generated `steps.jsonl` plus image folder as the first imitation-learning dataset.
+
