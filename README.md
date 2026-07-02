@@ -98,12 +98,59 @@ To also copy referenced JPGs into the merged folder:
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\merge_teacher_data.py --copy-images
 ```
 
+## Prepare ShadowHand action fine-tuning data
+
+For the first pi0/VLA fine-tuning pass, do not require a successful lift. Convert the current logs into image-state -> action samples for learning how ShadowHand should move from each visual state:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\prepare_shadowhand_action_dataset.py
+```
+
+Default behavior:
+
+- Task instruction becomes `control the ShadowHand to approach, contact, and hold the cube`.
+- Action schema is 20D: 17 ShadowHand joint targets + `hand_dx`, `hand_dy`, `hand_dz`.
+- Lift attempts from `scripu5b` are excluded by default.
+- Partial joint commands are completed by carrying forward the previous target in the same run.
+- Cube XY motion is measured and labeled as `stable` or `large_push` for debugging.
+
+Outputs are written to:
+
+```text
+C:\VScode\Yoshida_script\shadowhand_action_dataset\<timestamp>\
+```
+
+Generated files:
+
+| File | Purpose |
+| --- | --- |
+| `shadowhand_action_dataset.jsonl` | Main fine-tuning dataset. Each line is one image-state -> 20D action sample. |
+| `schema.json` | Action dimension order, units, and construction rules. |
+| `dataset_index.csv` | Quick check of observation/action pairing, behavior tags, hand delta, and cube motion. |
+| `action_debug.csv` | Full 20D action vector expanded into columns. |
+| `skipped_steps.csv` | Steps not used for initial action learning and the reason. |
+| `summary.json` | Counts by run, behavior, phase, action type, cube-motion label, and action min/max. |
+| `preview.txt` | Human-readable examples like `this image state -> this action`. |
+
+To copy referenced images into the output folder:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\prepare_shadowhand_action_dataset.py --copy-images
+```
+
+Later, when lift behavior is ready to train, include lift steps explicitly:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\prepare_shadowhand_action_dataset.py --include-lift-steps
+```
+
 ## Script roles
 
 | File | Role |
 | --- | --- |
 | `isaac_vscode_bridge.py` | Run once in Isaac Sim Script Editor. Opens localhost bridge. |
 | `merge_teacher_data.py` | Merge all teacher-data logs into ML-ready JSONL/CSV/summary files. |
+| `prepare_shadowhand_action_dataset.py` | Convert teacher logs into 20D ShadowHand image-state -> action samples for initial pi0/VLA fine-tuning. |
 | `send_to_isaac.py` | VS Code-side sender. |
 | `scripu1.py` | Save current hand/cube pose, cube scale, size, mass, and table height. |
 | `scripu2.py` | Restore saved state, define common helpers, initialize cameras, start teacher-data run. |
@@ -134,20 +181,33 @@ Tune these constants in `scripu2.py` first before changing the phase scripts.
 
 ## pi0 fine-tuning target
 
-The current pi0 placeholder output (`vx`, `vy`, `vz`, `gripper`) is not enough for ShadowHand. The target action schema should include phase, ShadowHand joint targets, and optional hand pose delta:
+The current pi0 placeholder output (`vx`, `vy`, `vz`, `gripper`) is not enough for ShadowHand. The first fine-tuning target should be image-state -> ShadowHand action, not full lift success. Use the 20D action schema:
 
 ```json
 {
-  "phase": "thumb_middle_contact",
+  "action_schema": "shadowhand_joint17_handdelta3_v1",
   "joint_targets": {
-    "MFJ3": 22,
-    "MFJ2": 30,
-    "THJ4": 30,
-    "THJ3": 34
+    "FFJ3": 12,
+    "FFJ2": 16,
+    "FFJ1": 12,
+    "MFJ3": 26,
+    "MFJ2": 34,
+    "MFJ1": 26,
+    "RFJ3": 12,
+    "RFJ2": 16,
+    "RFJ1": 12,
+    "LFJ4": 6,
+    "LFJ3": 12,
+    "LFJ2": 16,
+    "LFJ1": 12,
+    "THJ4": 34,
+    "THJ3": 38,
+    "THJ2": 36,
+    "THJ1": 28
   },
   "hand_delta": [0.0, 0.0, -0.002],
-  "wait_steps": 60
+  "behavior_tag": "support_contact"
 }
 ```
 
-Use the generated `steps.jsonl` plus image folder as the first imitation-learning dataset.
+Use `prepare_shadowhand_action_dataset.py` first. After pi0 can produce reasonable approach/contact/hold behavior, collect lift-specific data and rerun with `--include-lift-steps`.

@@ -3,6 +3,7 @@ __pycache__/
 .venv/
 venv/
 teacher_data/
+teacher_data_merged/
+shadowhand_action_dataset/
 camera/
 *.log
-
