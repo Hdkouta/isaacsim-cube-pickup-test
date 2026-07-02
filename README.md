@@ -116,6 +116,20 @@ To also copy referenced JPGs into the merged folder:
 | `scripu5c.py` | Return hand to saved initial pose. |
 | `scripu6.py` | Save all camera images. |
 
+## Current grasp tuning
+
+The scripts include conservative tuning for the latest failure mode where the cube slid sideways during hold:
+
+- Cube mass is overridden to `0.0025 kg` in `scripu2.py`.
+- Cube friction is increased to static `6.0`, dynamic `5.0`.
+- Finger/link material friction is increased to static `5.0`, dynamic `4.0`.
+- Cube damping is increased to reduce bouncing/sliding.
+- `scripu4a.py` now uses a smaller approach offset: `dx=0.004`, `dz=-0.004`.
+- `scripu5a.py` uses weaker hold targets and lower max force to avoid pushing the cube out.
+- `scripu5b.py` uses small scoop-lift steps: `dx=0.0002`, `dz=0.0015`, `12` steps.
+
+Tune these constants in `scripu2.py` first before changing the phase scripts.
+
 ## pi0 fine-tuning target
 
 The current pi0 placeholder output (`vx`, `vy`, `vz`, `gripper`) is not enough for ShadowHand. The target action schema should include phase, ShadowHand joint targets, and optional hand pose delta:

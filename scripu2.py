@@ -31,6 +31,23 @@ DEFAULT_CUBE_SCALE = [0.05, 0.10, 0.05]
 DEFAULT_CUBE_USD_SIZE = 1.0
 DEFAULT_TABLE_Z = 0.015
 DEFAULT_CUBE_MASS_KG = 0.005
+OBJECT_MASS_OVERRIDE_KG = 0.0025
+
+CUBE_STATIC_FRICTION = 6.0
+CUBE_DYNAMIC_FRICTION = 5.0
+FINGER_STATIC_FRICTION = 5.0
+FINGER_DYNAMIC_FRICTION = 4.0
+CUBE_LINEAR_DAMPING = 0.20
+CUBE_ANGULAR_DAMPING = 0.35
+
+APPROACH_DX = 0.004
+APPROACH_DY = 0.0
+APPROACH_DZ = -0.004
+
+LIFT_STEP_DZ = 0.0015
+LIFT_STEP_DX = 0.0002
+LIFT_STEP_DY = 0.0
+LIFT_STEPS = 12
 
 CUBE_SCALE = DEFAULT_CUBE_SCALE
 CUBE_USD_SIZE = DEFAULT_CUBE_USD_SIZE
@@ -242,13 +259,31 @@ def apply_cube_geometry_and_physics(cube):
     mass_api = UsdPhysics.MassAPI.Apply(cube)
     mass_api.GetMassAttr().Set(float(CUBE_MASS_KG))
 
+    if PhysxSchema is not None:
+        try:
+            physx_rb = PhysxSchema.PhysxRigidBodyAPI.Apply(cube)
+            set_attr_if_exists(physx_rb, "GetLinearDampingAttr", float(CUBE_LINEAR_DAMPING))
+            set_attr_if_exists(physx_rb, "GetAngularDampingAttr", float(CUBE_ANGULAR_DAMPING))
+        except Exception as e:
+            log(f"cube damping skipped: {e}")
+
     enable_gravity_dynamic(cube)
 
 
-def apply_high_friction_to_cube(static_friction=2.0, dynamic_friction=2.0):
-    cube, cube_path = get_cube()
+def apply_physx_material_settings(material_prim):
+    if PhysxSchema is None:
+        return
 
-    material_path = "/World/high_friction_material"
+    try:
+        physx_mat = PhysxSchema.PhysxMaterialAPI.Apply(material_prim)
+        set_attr_if_exists(physx_mat, "GetFrictionCombineModeAttr", "max")
+        set_attr_if_exists(physx_mat, "GetRestitutionCombineModeAttr", "min")
+        set_attr_if_exists(physx_mat, "GetImprovePatchFrictionAttr", True)
+    except Exception as e:
+        log(f"PhysX material settings skipped: {e}")
+
+
+def make_physics_material(material_path, static_friction, dynamic_friction):
     material_prim = stage.DefinePrim(material_path, "Material")
 
     physics_mat = UsdPhysics.MaterialAPI.Apply(material_prim)
@@ -256,10 +291,50 @@ def apply_high_friction_to_cube(static_friction=2.0, dynamic_friction=2.0):
     physics_mat.GetDynamicFrictionAttr().Set(float(dynamic_friction))
     physics_mat.GetRestitutionAttr().Set(0.0)
 
-    shade_mat = UsdShade.Material(material_prim)
+    apply_physx_material_settings(material_prim)
+
+    return material_prim, UsdShade.Material(material_prim)
+
+
+def apply_high_friction_to_cube(static_friction=CUBE_STATIC_FRICTION, dynamic_friction=CUBE_DYNAMIC_FRICTION):
+    cube, cube_path = get_cube()
+
+    material_path = "/World/high_friction_material"
+    _, shade_mat = make_physics_material(material_path, static_friction, dynamic_friction)
+
     UsdShade.MaterialBindingAPI.Apply(cube).Bind(shade_mat)
 
-    log(f"high friction applied: {cube_path}")
+    log(f"high friction applied to cube: {cube_path}, static={static_friction}, dynamic={dynamic_friction}")
+
+
+def apply_high_friction_to_hand_links(
+    static_friction=FINGER_STATIC_FRICTION,
+    dynamic_friction=FINGER_DYNAMIC_FRICTION,
+):
+    material_path = "/World/high_friction_finger_material"
+    _, shade_mat = make_physics_material(material_path, static_friction, dynamic_friction)
+
+    tokens = [
+        "ff", "mf", "rf", "lf", "th",
+        "finger", "thumb", "distal", "middle", "proximal",
+    ]
+    count = 0
+
+    for prim in stage.Traverse():
+        path_text = str(prim.GetPath()).lower()
+        name_text = prim.GetName().lower()
+        if "shadow_hand" not in path_text and "robot0" not in path_text:
+            continue
+        if not any(token in path_text or token in name_text for token in tokens):
+            continue
+
+        try:
+            UsdShade.MaterialBindingAPI.Apply(prim).Bind(shade_mat)
+            count += 1
+        except Exception:
+            pass
+
+    log(f"high friction applied to hand links: {count}, static={static_friction}, dynamic={dynamic_friction}")
 
 
 def remember_joint_targets(targets):
@@ -350,7 +425,8 @@ def apply_initial_state():
     CUBE_SCALE = data.get("cube_scale", DEFAULT_CUBE_SCALE)
     CUBE_USD_SIZE = float(data.get("cube_usd_size", DEFAULT_CUBE_USD_SIZE))
     TABLE_Z = float(data.get("table_z", DEFAULT_TABLE_Z))
-    CUBE_MASS_KG = float(data.get("cube_mass_kg", DEFAULT_CUBE_MASS_KG))
+    saved_cube_mass_kg = float(data.get("cube_mass_kg", DEFAULT_CUBE_MASS_KG))
+    CUBE_MASS_KG = float(OBJECT_MASS_OVERRIDE_KG) if OBJECT_MASS_OVERRIDE_KG is not None else saved_cube_mass_kg
 
     hand = stage.GetPrimAtPath(data["hand_path"])
     if not hand.IsValid():
@@ -378,6 +454,12 @@ def apply_initial_state():
         "cube_world_bottom_z": cube_world_bottom_z,
         "cube_bottom_above_table": cube_world_bottom_z - TABLE_Z,
         "cube_mass_kg": CUBE_MASS_KG,
+        "saved_cube_mass_kg": saved_cube_mass_kg,
+        "mass_override_kg": OBJECT_MASS_OVERRIDE_KG,
+        "cube_static_friction": CUBE_STATIC_FRICTION,
+        "cube_dynamic_friction": CUBE_DYNAMIC_FRICTION,
+        "finger_static_friction": FINGER_STATIC_FRICTION,
+        "finger_dynamic_friction": FINGER_DYNAMIC_FRICTION,
     })
 
 
@@ -610,7 +692,8 @@ def record_teacher_step(script_name, phase, action=None, note="", save_images=Tr
 
 apply_initial_state()
 open_hand_targets()
-apply_high_friction_to_cube(static_friction=2.0, dynamic_friction=2.0)
+apply_high_friction_to_cube(static_friction=CUBE_STATIC_FRICTION, dynamic_friction=CUBE_DYNAMIC_FRICTION)
+apply_high_friction_to_hand_links(static_friction=FINGER_STATIC_FRICTION, dynamic_friction=FINGER_DYNAMIC_FRICTION)
 
 cube, cube_path = get_cube()
 enable_gravity_dynamic(cube)

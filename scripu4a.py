@@ -12,9 +12,9 @@ data = json.loads(INITIAL_FILE.read_text(encoding="utf-8"))
 initial_hand_pos = data["hand_translate"]
 
 target_pos = [
-    initial_hand_pos[0] + 0.010,
-    initial_hand_pos[1],
-    initial_hand_pos[2] - 0.010,
+    initial_hand_pos[0] + APPROACH_DX,
+    initial_hand_pos[1] + APPROACH_DY,
+    initial_hand_pos[2] + APPROACH_DZ,
 ]
 
 hand, hand_path = get_hand()
@@ -35,7 +35,7 @@ record_teacher_step(
     save_images=True,
 )
 
-log("scripu4a safe v2: move hand to initial x +1cm, z -1cm")
+log(f"scripu4a safe v3: move hand by dx={APPROACH_DX}, dy={APPROACH_DY}, dz={APPROACH_DZ}")
 
 for i in range(24):
     alpha = float(i + 1) / 24.0
@@ -54,6 +54,7 @@ for i in range(24):
             action={
                 "type": "hand_pose_target",
                 "target_pos": target_pos,
+                "hand_delta": [APPROACH_DX, APPROACH_DY, APPROACH_DZ],
                 "alpha": alpha,
             },
             note="during approach movement",
@@ -69,13 +70,13 @@ record_teacher_step(
     action={
         "type": "hand_pose_target",
         "target_pos": target_pos,
+        "hand_delta": [APPROACH_DX, APPROACH_DY, APPROACH_DZ],
     },
     note="after hand moved to approach pose",
     save_images=True,
 )
 
-log_json("after scripu4a safe v2", {
+log_json("after scripu4a safe v3", {
     "hand_translate": get_translate(hand),
     "cube_translate": get_translate(cube),
 })
-
