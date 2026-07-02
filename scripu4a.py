@@ -35,10 +35,10 @@ record_teacher_step(
     save_images=True,
 )
 
-log(f"scripu4a safe v3: move hand by dx={APPROACH_DX}, dy={APPROACH_DY}, dz={APPROACH_DZ}")
+log(f"scripu4a safe v4: move hand by dx={APPROACH_DX}, dy={APPROACH_DY}, dz={APPROACH_DZ}")
 
-for i in range(24):
-    alpha = float(i + 1) / 24.0
+for i in range(APPROACH_STEPS):
+    alpha = float(i + 1) / float(APPROACH_STEPS)
     pos = [
         start[0] + (target_pos[0] - start[0]) * alpha,
         start[1] + (target_pos[1] - start[1]) * alpha,
@@ -47,7 +47,11 @@ for i in range(24):
     set_translate(hand, pos)
     wait_steps(2)
 
-    if i in [7, 15, 23]:
+    if i in [
+        max(0, APPROACH_STEPS // 3 - 1),
+        max(0, (APPROACH_STEPS * 2) // 3 - 1),
+        APPROACH_STEPS - 1,
+    ]:
         record_teacher_step(
             script_name="scripu4a",
             phase=f"approach_move_{i + 1}",
@@ -56,6 +60,7 @@ for i in range(24):
                 "target_pos": target_pos,
                 "hand_delta": [APPROACH_DX, APPROACH_DY, APPROACH_DZ],
                 "alpha": alpha,
+                "approach_steps": APPROACH_STEPS,
             },
             note="during approach movement",
             save_images=True,
@@ -71,12 +76,14 @@ record_teacher_step(
         "type": "hand_pose_target",
         "target_pos": target_pos,
         "hand_delta": [APPROACH_DX, APPROACH_DY, APPROACH_DZ],
+        "approach_steps": APPROACH_STEPS,
     },
     note="after hand moved to approach pose",
     save_images=True,
 )
 
-log_json("after scripu4a safe v3", {
+log_json("after scripu4a safe v4", {
     "hand_translate": get_translate(hand),
     "cube_translate": get_translate(cube),
+    "approach_delta": [APPROACH_DX, APPROACH_DY, APPROACH_DZ],
 })

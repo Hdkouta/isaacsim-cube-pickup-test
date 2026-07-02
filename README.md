@@ -124,7 +124,8 @@ The scripts include conservative tuning for the latest failure mode where the cu
 - Cube friction is increased to static `6.0`, dynamic `5.0`.
 - Finger/link material friction is increased to static `5.0`, dynamic `4.0`.
 - Cube damping is increased to reduce bouncing/sliding.
-- `scripu4a.py` now uses a smaller approach offset: `dx=0.004`, `dz=-0.004`.
+- `scripu4a.py` now uses a smaller approach offset: `dx=0.002`, `dy=-0.002`, `dz=-0.002`.
+- `scripu4a_tune.py` can be edited for small one-off approach-position corrections.
 - `scripu5a.py` uses weaker hold targets and lower max force to avoid pushing the cube out.
 - `scripu5b.py` uses small scoop-lift steps: `dx=0.0002`, `dz=0.0015`, `12` steps.
 
