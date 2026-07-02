@@ -10,6 +10,7 @@ import omni.kit.app
 
 HOST = "127.0.0.1"
 PORT = 8765
+EXEC_TIMEOUT_SEC = 900
 
 if getattr(builtins, "_ISAAC_VSCODE_BRIDGE_RUNNING", False):
     print("Isaac VSCode bridge is already running")
@@ -64,8 +65,8 @@ else:
             item = {"code": code, "done": done, "result": ""}
             request_queue.put(item)
 
-            if not done.wait(timeout=300):
-                result = "[timeout] script did not finish within 300 seconds"
+            if not done.wait(timeout=EXEC_TIMEOUT_SEC):
+                result = f"[timeout] script did not finish within {EXEC_TIMEOUT_SEC} seconds"
             else:
                 result = item["result"]
 
@@ -89,4 +90,3 @@ else:
 
     threading.Thread(target=server_loop, daemon=True).start()
     print("Isaac VSCode bridge started")
-
