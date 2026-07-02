@@ -1,0 +1,56 @@
+{
+  "created_at": "2026-07-02 04:12:21",
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "total_eval_samples": 10,
+  "total_source_files": 11,
+  "total_skipped_steps": 21,
+  "source_files": [
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_033546_7a3887dc\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_033724_c4229c27\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_033947_53e9a527\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034120_d54bd368\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034232_6f435b94\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034522_b01af694\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034608_d57d9681\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034801_bc50d2ec\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_034939_c9618852\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035118_ab25a1a5\\eval_steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888\\eval_steps.jsonl"
+  ],
+  "output_files": {
+    "dataset_jsonl": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\pi0_eval_dataset.jsonl",
+    "dataset_json": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\pi0_eval_dataset.json",
+    "index_csv": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\pi0_eval_index.csv",
+    "action_debug_csv": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\pi0_eval_action_debug.csv",
+    "skipped_csv": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\skipped_steps.csv",
+    "summary_json": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\summary.json",
+    "preview_txt": "C:\\VScode\\Yoshida_script\\pi0_action_eval_merged\\20260702_041221\\preview.txt"
+  },
+  "config": {
+    "stable_cube_xy_threshold": 0.001,
+    "copy_images": false
+  },
+  "samples_by_run": {
+    "20260702_033724_c4229c27": 1,
+    "20260702_033947_53e9a527": 1,
+    "20260702_034120_d54bd368": 1,
+    "20260702_034232_6f435b94": 1,
+    "20260702_034522_b01af694": 1,
+    "20260702_034608_d57d9681": 1,
+    "20260702_034801_bc50d2ec": 1,
+    "20260702_034939_c9618852": 1,
+    "20260702_035118_ab25a1a5": 1,
+    "20260702_035510_a62a8888": 1
+  },
+  "samples_by_behavior_label": {
+    "approach_only": 1,
+    "approach_preshape": 9
+  },
+  "samples_by_cube_motion_label": {
+    "stable": 10
+  },
+  "skipped_by_reason": {
+    "env_ready_not_action_result": 11,
+    "before_action_not_result": 10
+  }
+}

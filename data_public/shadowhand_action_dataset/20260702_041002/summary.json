@@ -1,0 +1,133 @@
+{
+  "created_at": "2026-07-02 04:10:02",
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "action_dim": 20,
+  "total_samples": 14,
+  "total_skipped_steps": 108,
+  "total_source_files": 9,
+  "total_observation_images_referenced": 112,
+  "stale_observation_sample_count": 0,
+  "source_files": [
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260701_061524_3dd56b17\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260701_063048_d30598eb\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260701_063101_25fb34d6\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260701_074001_5b39ccb8\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260701_081252_3954dd29\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260702_013927_c22884f5\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260702_014053_7bc7e740\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260702_022126_de6a085c\\steps.jsonl",
+    "C:\\VScode\\Yoshida_script\\teacher_data\\20260702_025019_71281a45\\steps.jsonl"
+  ],
+  "output_files": {
+    "dataset_jsonl": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\shadowhand_action_dataset.jsonl",
+    "dataset_json": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\shadowhand_action_dataset.json",
+    "dataset_csv": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\dataset_index.csv",
+    "action_debug_csv": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\action_debug.csv",
+    "skipped_csv": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\skipped_steps.csv",
+    "schema_json": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\schema.json",
+    "summary_json": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\summary.json",
+    "preview_txt": "C:\\VScode\\Yoshida_script\\shadowhand_action_dataset\\20260702_041002\\preview.txt"
+  },
+  "config": {
+    "instruction": "control the ShadowHand to approach, contact, and hold the cube",
+    "keep_source_instruction": false,
+    "include_lift_steps": false,
+    "include_no_image": false,
+    "max_observation_age": 0,
+    "max_stable_cube_xy_motion": 0.01,
+    "action_types": [
+      "hand_delta",
+      "joint_targets"
+    ]
+  },
+  "samples_by_run": {
+    "20260702_014053_7bc7e740": 6,
+    "20260702_022126_de6a085c": 2,
+    "20260702_025019_71281a45": 6
+  },
+  "samples_by_behavior_tag": {
+    "preshape_contact": 6,
+    "support_contact": 4,
+    "hold": 4
+  },
+  "samples_by_action_phase": {
+    "after_preshape": 3,
+    "after_thumb_middle_contact": 3,
+    "after_support_contact": 2,
+    "after_final_light_contact": 2,
+    "after_hold_close": 2,
+    "after_final_hold": 2
+  },
+  "samples_by_action_type": {
+    "joint_targets": 14
+  },
+  "samples_by_cube_motion_label": {
+    "stable": 13,
+    "large_push": 1
+  },
+  "skipped_by_reason": {
+    "non_trainable_action_type_setup": 9,
+    "non_trainable_action_type_before_adaptive_grasp": 2,
+    "non_trainable_action_type_adaptive_close_test": 15,
+    "non_trainable_action_type_adaptive_grasp_done": 2,
+    "non_trainable_action_type_start_approach": 5,
+    "non_trainable_action_type_hand_pose_target": 16,
+    "non_trainable_action_type_before_lift": 3,
+    "lift_step_excluded_for_initial_action_learning": 30,
+    "non_trainable_action_type_lift_done": 3,
+    "non_trainable_action_type_grasp_sweep": 3,
+    "non_trainable_action_type_unknown": 2,
+    "non_trainable_action_type_status": 4,
+    "non_trainable_action_type_open_hand": 3,
+    "non_trainable_action_type_before_joint_targets": 3,
+    "non_trainable_action_type_before_support_fingers": 2,
+    "non_trainable_action_type_before_hold": 2,
+    "non_trainable_action_type_wrist_lock": 2,
+    "non_trainable_action_type_before_return": 1,
+    "non_trainable_action_type_return_done": 1
+  },
+  "action_min": {
+    "FFJ3": 8.0,
+    "FFJ2": 12.0,
+    "FFJ1": 8.0,
+    "MFJ3": 10.0,
+    "MFJ2": 16.0,
+    "MFJ1": 12.0,
+    "RFJ3": 8.0,
+    "RFJ2": 12.0,
+    "RFJ1": 8.0,
+    "LFJ4": 4.0,
+    "LFJ3": 8.0,
+    "LFJ2": 12.0,
+    "LFJ1": 8.0,
+    "THJ4": 18.0,
+    "THJ3": 20.0,
+    "THJ2": 18.0,
+    "THJ1": 14.0,
+    "hand_dx": 0.0,
+    "hand_dy": 0.0,
+    "hand_dz": 0.0
+  },
+  "action_max": {
+    "FFJ3": 16.0,
+    "FFJ2": 20.0,
+    "FFJ1": 16.0,
+    "MFJ3": 34.0,
+    "MFJ2": 42.0,
+    "MFJ1": 34.0,
+    "RFJ3": 16.0,
+    "RFJ2": 20.0,
+    "RFJ1": 16.0,
+    "LFJ4": 8.0,
+    "LFJ3": 16.0,
+    "LFJ2": 20.0,
+    "LFJ1": 16.0,
+    "THJ4": 44.0,
+    "THJ3": 48.0,
+    "THJ2": 46.0,
+    "THJ1": 36.0,
+    "hand_dx": 0.0,
+    "hand_dy": 0.0,
+    "hand_dz": 0.0
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "instruction": "control the ShadowHand to approach, contact, and hold the cube",
+  "vector": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "joint_targets": {
+    "FFJ3": 0.0,
+    "FFJ2": 0.0,
+    "FFJ1": 0.0,
+    "MFJ3": 0.0,
+    "MFJ2": 0.0,
+    "MFJ1": 0.0,
+    "RFJ3": 0.0,
+    "RFJ2": 0.0,
+    "RFJ1": 0.0,
+    "LFJ4": 0.0,
+    "LFJ3": 0.0,
+    "LFJ2": 0.0,
+    "LFJ1": 0.0,
+    "THJ4": 0.0,
+    "THJ3": 0.0,
+    "THJ2": 0.0,
+    "THJ1": 0.0
+  },
+  "hand_delta": [
+    0.0,
+    0.0,
+    0.0
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "instruction": "control the ShadowHand to approach, contact, and hold the cube",
+  "action_dim": 20,
+  "dimensions": [
+    {
+      "index": 0,
+      "name": "FFJ3",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 1,
+      "name": "FFJ2",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 2,
+      "name": "FFJ1",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 3,
+      "name": "MFJ3",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 4,
+      "name": "MFJ2",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 5,
+      "name": "MFJ1",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 6,
+      "name": "RFJ3",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 7,
+      "name": "RFJ2",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 8,
+      "name": "RFJ1",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 9,
+      "name": "LFJ4",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 10,
+      "name": "LFJ3",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 11,
+      "name": "LFJ2",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 12,
+      "name": "LFJ1",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 13,
+      "name": "THJ4",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 14,
+      "name": "THJ3",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 15,
+      "name": "THJ2",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 16,
+      "name": "THJ1",
+      "kind": "shadowhand_joint_target",
+      "unit": "degrees"
+    },
+    {
+      "index": 17,
+      "name": "hand_dx",
+      "kind": "hand_base_delta",
+      "unit": "meters"
+    },
+    {
+      "index": 18,
+      "name": "hand_dy",
+      "kind": "hand_base_delta",
+      "unit": "meters"
+    },
+    {
+      "index": 19,
+      "name": "hand_dz",
+      "kind": "hand_base_delta",
+      "unit": "meters"
+    }
+  ],
+  "units": {
+    "joint_targets": "degrees",
+    "hand_delta": "meters"
+  }
+}

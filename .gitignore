@@ -16,3 +16,16 @@ configs/action_input_test.json
 !configs/action_input_hold_example.json
 camera/
 *.log
+
+!data_public/
+!data_public/README.md
+!data_public/teacher_data/
+!data_public/teacher_data/**
+!data_public/shadowhand_action_dataset/
+!data_public/shadowhand_action_dataset/**
+!data_public/pi0_action_eval/
+!data_public/pi0_action_eval/**
+!data_public/pi0_action_eval_merged/
+!data_public/pi0_action_eval_merged/**
+!data_public/camera/
+!data_public/camera/**

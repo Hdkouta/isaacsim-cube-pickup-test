@@ -1,0 +1,76 @@
+pi0/shadowhand action env start
+{
+  "run_id": "20260702_035510_a62a8888",
+  "run_dir": "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888",
+  "config_file": "C:\\VScode\\Yoshida_script\\pi0_action_env_config.json",
+  "action_file": "C:\\VScode\\Yoshida_script\\pi0_shadowhand_action.json",
+  "action_template_file": "C:\\VScode\\Yoshida_script\\pi0_shadowhand_action_template.json"
+}
+initial state restored
+{
+  "hand_translate": [
+    -0.27821047093028317,
+    0.0326124528172253,
+    0.17627827214581288
+  ],
+  "cube_translate": [
+    0.07455328851938248,
+    0.02136417292058468,
+    0.04025612398982048
+  ],
+  "cube_scale": [
+    0.05000000074505806,
+    0.10000000149011612,
+    0.05000000074505806
+  ],
+  "object_mass_kg": 0.0025
+}
+high friction applied to cube: /World/Cube
+high friction applied to hand links: 124
+opened hand target joints: 22
+wrist locked joints: 1
+camera initialized: /World/shadow_hand/robot0_forearm/Camera_wrist
+camera initialized: /World/Camera_front
+camera initialized: /World/Camera_top
+camera initialized: /World/Camera_side
+camera initialized: /OmniverseKit_Persp
+camera initialized: /OmniverseKit_Front
+camera initialized: /OmniverseKit_Top
+camera initialized: /OmniverseKit_Right
+eval step saved
+{
+  "step_id": "035515_pi0_env_env_ready",
+  "phase": "env_ready",
+  "image_count": 8,
+  "eval_jsonl": "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888\\eval_steps.jsonl"
+}
+eval step saved
+{
+  "step_id": "035522_pi0_env_before_action",
+  "phase": "before_action",
+  "image_count": 8,
+  "eval_jsonl": "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888\\eval_steps.jsonl"
+}
+set joint targets: 17
+eval step saved
+{
+  "step_id": "035546_pi0_env_after_action",
+  "phase": "after_action",
+  "image_count": 8,
+  "eval_jsonl": "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888\\eval_steps.jsonl"
+}
+shadowhand action applied
+{
+  "action_file": "C:\\VScode\\Yoshida_script\\pi0_shadowhand_action.json",
+  "hand_delta": [
+    0.002,
+    -0.002,
+    -0.002
+  ],
+  "cube_motion": [
+    -0.00031444430351257324,
+    -7.496587932109833e-05,
+    0.00025163963437080383
+  ],
+  "run_dir": "C:\\VScode\\Yoshida_script\\pi0_action_eval\\20260702_035510_a62a8888"
+}

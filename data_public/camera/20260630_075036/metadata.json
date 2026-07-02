@@ -1,0 +1,282 @@
+{
+  "timestamp": "20260630_075036",
+  "resolution": [
+    640,
+    480
+  ],
+  "save_dir": "C:\\robot_assets\\camera_captures\\20260630_075036",
+  "cameras": [
+    {
+      "name": "Camera_wrist",
+      "path": "/World/shadow_hand/robot0_forearm/Camera_wrist",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_shadow_hand_robot0_forearm_Camera_wrist.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_shadow_hand_robot0_forearm_Camera_wrist.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          0.012776860345676287,
+          -0.09859294828453948,
+          0.010778778928960214,
+          0.0
+        ],
+        [
+          -0.003425750485918583,
+          0.010422662679111053,
+          0.09939634151466441,
+          0.0
+        ],
+        [
+          -0.09912121739857879,
+          -0.01306898545640647,
+          -0.002045855663483507,
+          0.0
+        ],
+        [
+          -0.19183376405926283,
+          -0.004739945002064802,
+          0.1495371563430427,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Camera_front",
+      "path": "/World/Camera_front",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_front.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_front.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          0.5531734228741061,
+          -0.8061801172643458,
+          -0.2099351870301667,
+          0.0
+        ],
+        [
+          0.4700696038414246,
+          0.09401014464592727,
+          0.8776084891613218,
+          0.0
+        ],
+        [
+          -0.6877744774052841,
+          -0.5841538420923871,
+          0.4309646818459617,
+          0.0
+        ],
+        [
+          -0.4385506212711334,
+          -0.4639706611633301,
+          0.4342247247695923,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Camera_top",
+      "path": "/World/Camera_top",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_top.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_top.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          0.29812184758817784,
+          -0.006294424000651742,
+          -0.032920379245519174,
+          0.0
+        ],
+        [
+          0.019915700391513205,
+          0.2702691969323894,
+          0.1286776329437028,
+          0.0
+        ],
+        [
+          0.026958041862944558,
+          -0.13005748178624268,
+          0.2689950233050686,
+          0.0
+        ],
+        [
+          0.12636259198188782,
+          -0.12677189707756042,
+          0.4252224564552307,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "Camera_side",
+      "path": "/World/Camera_side",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_side.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\World_Camera_side.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          -0.28982646013238916,
+          -0.043279893159753904,
+          0.06424547460923952,
+          0.0
+        ],
+        [
+          0.060115902391122765,
+          0.03125009568959167,
+          0.2922490666394845,
+          0.0
+        ],
+        [
+          -0.0488539500899073,
+          0.2952122787419743,
+          -0.02151764841104145,
+          0.0
+        ],
+        [
+          0.011841279454529285,
+          0.42371687293052673,
+          0.03717460483312607,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "OmniverseKit_Persp",
+      "path": "/OmniverseKit_Persp",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Persp.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Persp.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          -0.9203858725208529,
+          0.3910113114272127,
+          3.0531134457545373e-16,
+          0.0
+        ],
+        [
+          0.021305804905002255,
+          0.0501508812255924,
+          0.9985143723500662,
+          0.0
+        ],
+        [
+          0.3904304142115195,
+          0.9190185218200275,
+          -0.05448897329142377,
+          0.0
+        ],
+        [
+          0.3106130616486419,
+          1.1642460614115158,
+          0.18425144538200314,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "OmniverseKit_Front",
+      "path": "/OmniverseKit_Front",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Front.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Front.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          -2.220446049250313e-16,
+          1.0000000000000002,
+          2.220446075169146e-16,
+          0.0
+        ],
+        [
+          2.220446049250314e-16,
+          -2.2204460751691467e-16,
+          1.0000000000000002,
+          0.0
+        ],
+        [
+          1.0000000000000004,
+          2.220446049250314e-16,
+          -2.220446049250313e-16,
+          0.0
+        ],
+        [
+          5.0,
+          0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "OmniverseKit_Top",
+      "path": "/OmniverseKit_Top",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Top.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Top.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          -2.220446049250313e-16,
+          -1.0000000000000002,
+          1.2246467691574846e-16,
+          0.0
+        ],
+        [
+          1.0000000000000002,
+          -2.2204460492503128e-16,
+          2.220446075169146e-16,
+          0.0
+        ],
+        [
+          -2.220446075169146e-16,
+          1.2246467691574853e-16,
+          1.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          5.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "OmniverseKit_Right",
+      "path": "/OmniverseKit_Right",
+      "jpg_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Right.jpg",
+      "npy_path": "C:\\robot_assets\\camera_captures\\20260630_075036\\OmniverseKit_Right.npy",
+      "width": 640,
+      "height": 480,
+      "world_matrix": [
+        [
+          1.0,
+          -2.220446075169146e-16,
+          -1.2325951787956736e-32,
+          0.0
+        ],
+        [
+          -3.6977855363870205e-32,
+          -2.220446049250313e-16,
+          1.0000000000000002,
+          0.0
+        ],
+        [
+          -2.2204460751691467e-16,
+          -1.0000000000000002,
+          -2.220446049250313e-16,
+          0.0
+        ],
+        [
+          0.0,
+          -5.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  ]
+}
