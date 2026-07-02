@@ -55,12 +55,6 @@ Run after Play:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu3.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu_run_all.py
-```
-
-If you want to execute phases manually, run the split scripts instead:
-
-```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4a.py
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4b.py
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4c.py
@@ -115,7 +109,7 @@ To also copy referenced JPGs into the merged folder:
 | `scripu2.py` | Restore saved state, define common helpers, initialize cameras, start teacher-data run. |
 | `scripu3.py` | Read-only status check. |
 | `scripu_run_all.py` | Combined approach/contact/hold/lift/return sequence with teacher-data logging. |
-| `scripu4a.py` | Approach: open hand and move to saved initial pose offset. |
+| `scripu4a.py` | Approach: open hand and move to saved initial pose offset. Edit `TUNE_DX/Y/Z` in this file for 1-2 mm corrections. |
 | `scripu4b.py` | Weak preshape + thumb/middle contact. |
 | `scripu4c.py` | Weak support-finger contact + final light contact. |
 | `scripu5a.py` | Wrist lock + weak hold. |
@@ -132,7 +126,7 @@ The scripts include conservative tuning for the latest failure mode where the cu
 - Finger/link material friction is increased to static `5.0`, dynamic `4.0`.
 - Cube damping is increased to reduce bouncing/sliding.
 - `scripu4a.py` now uses a smaller approach offset: `dx=0.002`, `dy=-0.002`, `dz=-0.002`.
-- `scripu4a_tune.py` can be edited for small one-off approach-position corrections.
+- `scripu4a.py` also includes `TUNE_DX`, `TUNE_DY`, `TUNE_DZ` for small one-off approach-position corrections.
 - `scripu5a.py` uses weaker hold targets and lower max force to avoid pushing the cube out.
 - `scripu5b.py` uses small scoop-lift steps: `dx=0.0002`, `dz=0.0015`, `12` steps.
 
