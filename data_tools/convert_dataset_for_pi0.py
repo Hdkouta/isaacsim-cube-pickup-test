@@ -114,7 +114,7 @@ def convert_row(item, filters, max_images, output_dir, enable_relative):
             "run_id": item.get("run_id"),
             "behavior_tag": item.get("behavior_tag"),
             "observation_phase": observation.get("source_phase"),
-            "action_phase": item.get("action_phase"),
+            "action_phase": action.get("source_phase"),
             "cube_motion_label": (item.get("quality") or {}).get("cube_motion_label"),
             "source_jsonl": (item.get("source") or {}).get("jsonl"),
             "source_line": (item.get("source") or {}).get("line"),

@@ -18,14 +18,10 @@ HAND_PATH_CANDIDATES = [
     "/World/ShadowHand",
     "/ShadowHand",
 ]
-
 CUBE_PATH_CANDIDATES = [
     "/World/Cube",
     "/Cube",
 ]
-
-FINGER_KEYS = ["FFJ", "MFJ", "RFJ", "LFJ", "THJ"]
-DRIVE_NAMES = ["angular", "rotX", "rotY", "rotZ"]
 
 stage = omni.usd.get_context().get_stage()
 
@@ -115,7 +111,6 @@ def enable_gravity_dynamic(prim):
         try:
             physx_rb = PhysxSchema.PhysxRigidBodyAPI.Apply(prim)
             set_attr_if_exists(physx_rb, "GetDisableGravityAttr", False)
-            print("PhysX gravity enabled")
         except Exception as e:
             print(f"PhysX gravity attr skipped: {e}")
 
@@ -131,41 +126,18 @@ def get_cube_mass(cube):
     return float(value)
 
 
-def open_hand_targets():
-    count = 0
-
-    for prim in stage.Traverse():
-        name = prim.GetName()
-
-        if any(key in name for key in FINGER_KEYS):
-            for drive_name in DRIVE_NAMES:
-                drive = UsdPhysics.DriveAPI.Apply(prim, drive_name)
-                drive.GetTargetPositionAttr().Set(0.0)
-                drive.GetStiffnessAttr().Set(150.0)
-                drive.GetDampingAttr().Set(20.0)
-                drive.GetMaxForceAttr().Set(800.0)
-
-            count += 1
-
-    print(f"opened hand targets: {count}")
-
-
 hand, hand_path = find_prim(HAND_PATH_CANDIDATES, fallback_name="shadow_hand")
 cube, cube_path = find_prim(CUBE_PATH_CANDIDATES, fallback_name="Cube")
-
-open_hand_targets()
 
 cube_translate = get_translate(cube)
 cube_scale = get_scale(cube)
 cube_usd_size = get_cube_usd_size(cube)
 cube_mass_kg = get_cube_mass(cube)
-
 cube_dimensions = [
     cube_usd_size * cube_scale[0],
     cube_usd_size * cube_scale[1],
     cube_usd_size * cube_scale[2],
 ]
-
 table_z = cube_translate[2] - cube_dimensions[2] / 2.0
 
 UsdPhysics.CollisionAPI.Apply(cube)
@@ -184,10 +156,7 @@ data = {
 }
 
 INITIAL_FILE.parent.mkdir(parents=True, exist_ok=True)
-INITIAL_FILE.write_text(json.dumps(data, indent=2), encoding="utf-8")
+INITIAL_FILE.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
-print("saved current initial state:")
-print(json.dumps(data, indent=2))
-
-omni.usd.get_context().save_stage()
-print("saved stage: current hand/cube pose and cube size saved")
+print("saved ShadowHand/Cube start state")
+print(json.dumps(data, ensure_ascii=False, indent=2))

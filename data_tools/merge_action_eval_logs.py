@@ -142,6 +142,10 @@ def group_by_run(items):
 
 
 def infer_behavior_label(action):
+    preset_name = action.get("preset_name")
+    if preset_name:
+        return str(preset_name)
+
     joint_targets = action.get("joint_targets") or {}
     hand_delta = xyz(action.get("hand_delta"))
     nonzero_hand_delta = any(abs(value) > 1e-12 for value in hand_delta)
@@ -169,6 +173,8 @@ def infer_behavior_label(action):
         return "approach_preshape"
     if matches(8, 22, 30, 24):
         return "thumb_middle_contact"
+    if matches(10, 22, 30, 24):
+        return "support_contact"
     if matches(12, 26, 34, 28):
         return "final_light_contact"
     if matches(14, 30, 40, 32):

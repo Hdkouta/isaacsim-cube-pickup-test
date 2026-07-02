@@ -1,155 +1,212 @@
-# Isaac Sim Cube Pickup Test
+# Isaac Sim ShadowHand pi0 action dataset
 
-This repository is an optimized, clean version of Yoshida_script.
+This repository is now optimized for the pi0/VLA workflow:
 
-Goal now:
-- learn image state -> ShadowHand 20D action
-- focus on approach/contact/hold stability
-- add lift tuning later
+- build and inspect `image state -> ShadowHand 20D action` datasets
+- evaluate one 20D action in Isaac Sim
+- keep uploaded public data snapshots for analysis outside the Isaac Sim machine
 
-## Folders
+The old scripted pickup/lift step files were removed. Use the uploaded data and the tools below as the main workflow.
 
-- bridge: Isaac Sim bridge script (run in Script Editor)
-- run: send script from VS Code to Isaac Sim
-- run_steps/pickup: pickup phase scripts (old scripu1 to scripu6)
-- run_steps/finish: hold/lift/return scripts (old scripu5a to scripu5c)
-- run_steps/tools: helper scripts (camera save, reset initial)
-- run_steps/flow: one-shot full sequence script
-- eval: apply one action and evaluate before/after
-- data_tools: merge logs and build datasets
-- configs: JSON examples and runtime JSON location
-- results: output folder guide
+## Current folder layout
 
-## Local paths used
+| Folder | Purpose |
+| --- | --- |
+| `bridge` | Isaac Sim bridge script. Run this once in Isaac Sim Script Editor. |
+| `run` | VS Code/PowerShell sender for scripts that must execute inside Isaac Sim. |
+| `eval` | One-action evaluation environment and preset writer. |
+| `data_tools` | Dataset merge, conversion, and eval-log aggregation tools. |
+| `configs` | Example config/action JSON files. Runtime JSON files are ignored. |
+| `data_public` | Uploaded runtime data snapshot for GitHub browsing/analysis. |
+| `results` | Runtime output location guide. |
 
-- C:\isaacsim\python.bat
-- C:\VScode\Yoshida_script
-- C:\robot_assets\shadow_hand_initial.json
+## Local paths
 
-Runtime output folders (ignored in git):
-- C:\VScode\Yoshida_script\teacher_data
-- C:\VScode\Yoshida_script\teacher_data_merged
-- C:\VScode\Yoshida_script\shadowhand_action_dataset
-- C:\VScode\Yoshida_script\pi0_action_eval
-- C:\VScode\Yoshida_script\pi0_action_eval_merged
-- C:\VScode\Yoshida_script\camera
-
-## 1) Bridge setup
-
-Run once in Isaac Sim Script Editor:
-
-- bridge/isaac_bridge_server.py
-
-## 2) Teacher run order
-
-Run while STOP:
-
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step1_save_start_state.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step2_setup_teacher_env.py
+```text
+C:\isaacsim\python.bat
+C:\VScode\Yoshida_script
+C:\robot_assets\shadow_hand_initial.json
 ```
 
-In Isaac Sim: Save stage, then Play.
+Runtime output folders are ignored by git:
 
-Run after Play:
-
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step3_check_state.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step4_approach.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step5_preshape_contact.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step6_support_contact.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step7_hold.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step8_lift_try.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step9_return.py
+```text
+C:\VScode\Yoshida_script\teacher_data
+C:\VScode\Yoshida_script\teacher_data_merged
+C:\VScode\Yoshida_script\shadowhand_action_dataset
+C:\VScode\Yoshida_script\pi0_action_eval
+C:\VScode\Yoshida_script\pi0_action_eval_merged
+C:\VScode\Yoshida_script\camera
 ```
 
-Optional camera save:
+## Data already uploaded
 
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\tools\step10_save_camera_images.py
+The latest public snapshot includes:
+
+```text
+data_public\teacher_data
+data_public\shadowhand_action_dataset\20260702_041002
+data_public\pi0_action_eval
+data_public\pi0_action_eval_merged\20260702_041221
 ```
 
-## 3) Build dataset for pi0
+Important generated files:
 
-Merge teacher logs:
-
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\merge_teacher_logs.py
+```text
+data_public\shadowhand_action_dataset\20260702_041002\pi0_finetune_dataset.jsonl
+data_public\shadowhand_action_dataset\20260702_041002\summary.json
+data_public\pi0_action_eval_merged\20260702_041221\pi0_eval_action_debug.csv
+data_public\pi0_action_eval_merged\20260702_041221\summary.json
 ```
 
-Create image -> 20D action dataset:
+Current dataset snapshot:
 
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\make_shadowhand_action_dataset.py
+- `total_samples`: 14
+- behavior tags: `preshape_contact`, `support_contact`, `hold`
+- cube motion labels: 13 `stable`, 1 `large_push`
+- action schema: `shadowhand_joint17_handdelta3_v1`
+
+## 20D action schema
+
+The model action is:
+
+```text
+17 ShadowHand joint targets + 3 hand deltas
 ```
 
-Convert to compact pi0 JSONL:
+Dimension order:
 
-```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\convert_dataset_for_pi0.py
+```text
+FFJ3, FFJ2, FFJ1,
+MFJ3, MFJ2, MFJ1,
+RFJ3, RFJ2, RFJ1,
+LFJ4, LFJ3, LFJ2, LFJ1,
+THJ4, THJ3, THJ2, THJ1,
+hand_dx, hand_dy, hand_dz
 ```
 
-## 4) Evaluate one action in Isaac Sim
+Joint targets are degrees. Hand deltas are meters.
 
-Write preset action JSON:
+## Recommended next steps
+
+1. Inspect the uploaded fine-tuning dataset:
 
 ```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\eval\set_action_preset.py --preset thumb_middle_contact
+Get-Content C:\VScode\Yoshida_script\data_public\shadowhand_action_dataset\20260702_041002\pi0_finetune_dataset.jsonl -TotalCount 2
 ```
 
-Apply action and record before/after:
+2. Start pi0/VLA fine-tuning with:
+
+```text
+C:\VScode\Yoshida_script\data_public\shadowhand_action_dataset\20260702_041002\pi0_finetune_dataset.jsonl
+```
+
+3. After training, write a predicted 20D action to:
+
+```text
+C:\VScode\Yoshida_script\configs\action_input.json
+```
+
+4. Run the predicted action in Isaac Sim:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\apply_action_env.py
 ```
 
-Merge eval logs:
+If the start-state file is missing or you intentionally changed the scene pose, save the current ShadowHand/Cube state first:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\save_start_state.py
+```
+
+5. Merge evaluation logs:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\merge_action_eval_logs.py
 ```
 
-## Config files
+6. Judge results from:
+
+```text
+C:\VScode\Yoshida_script\pi0_action_eval_merged\<timestamp>\pi0_eval_action_debug.csv
+```
+
+Primary success criteria for the first stage:
+
+- fingers move according to the intended action stage
+- cube remains `stable`
+- cube XY motion stays under about `0.001 m`
+- approach/contact/hold sequence is consistent
+
+Do not target lift first. Lift should be added after the policy reliably produces stable approach/contact/hold actions.
+
+## Rebuild datasets from local teacher logs
+
+If you collect more `teacher_data`, rebuild the training dataset:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\make_shadowhand_action_dataset.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\convert_dataset_for_pi0.py
+```
+
+The compact pi0 file is:
+
+```text
+C:\VScode\Yoshida_script\shadowhand_action_dataset\<timestamp>\pi0_finetune_dataset.jsonl
+```
+
+## Evaluate known action presets
+
+The eval environment resets from `C:\robot_assets\shadow_hand_initial.json` by default. Therefore preset actions include the approach hand delta by default.
+
+Write a preset:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\eval\set_action_preset.py --preset thumb_middle_contact
+```
+
+Apply it in Isaac Sim:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\apply_action_env.py
+```
+
+Available presets:
+
+```text
+approach_only
+preshape
+thumb_middle_contact
+support_contact
+final_light_contact
+hold_close
+final_hold
+```
+
+If you intentionally apply actions sequentially without resetting the hand, override the delta:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\eval\set_action_preset.py --preset final_light_contact --hand-delta 0 0 0
+```
+
+## Runtime config files
 
 Tracked examples:
-- configs/action_env_config.example.json
-- configs/action_input_template.example.json
-- configs/action_input_hold_example.json
 
-Runtime files (ignored):
-- configs/action_env_config.json
-- configs/action_input.json
-- configs/action_input_template.json
+```text
+configs\action_env_config.example.json
+configs\action_input_template.example.json
+configs\action_input_hold_example.json
+```
 
-## Action presets
+Runtime files, ignored by git:
 
-set_action_preset.py supports:
-- approach_only
-- preshape
-- thumb_middle_contact
-- support_contact
-- final_light_contact
-- final_hold
+```text
+configs\action_env_config.json
+configs\action_input.json
+configs\action_input_template.json
+```
 
-## Old name -> new name
+## Legacy note
 
-- isaac_vscode_bridge.py -> bridge/isaac_bridge_server.py
-- send_to_isaac.py -> run/send_script_to_isaac.py
-- scripu1.py -> run_steps/pickup/step1_save_start_state.py
-- scripu2.py -> run_steps/pickup/step2_setup_teacher_env.py
-- scripu3.py -> run_steps/pickup/step3_check_state.py
-- scripu4a.py -> run_steps/pickup/step4_approach.py
-- scripu4b.py -> run_steps/pickup/step5_preshape_contact.py
-- scripu4c.py -> run_steps/pickup/step6_support_contact.py
-- scripu5a.py -> run_steps/finish/step7_hold.py
-- scripu5b.py -> run_steps/finish/step8_lift_try.py
-- scripu5c.py -> run_steps/finish/step9_return.py
-- scripu6.py -> run_steps/tools/step10_save_camera_images.py
-- scripu_run_all.py -> run_steps/flow/run_all_steps.py
-- scripu_reset_initial.py -> run_steps/tools/reset_hand_start_state.py
-- apply_shadowhand_action_env.py -> eval/apply_action_env.py
-- set_pi0_shadowhand_action.py -> eval/set_action_preset.py
-- merge_teacher_data.py -> data_tools/merge_teacher_logs.py
-- prepare_shadowhand_action_dataset.py -> data_tools/make_shadowhand_action_dataset.py
-- merge_pi0_action_eval.py -> data_tools/merge_action_eval_logs.py
-- convert_shadowhand_dataset_to_pi0.py -> data_tools/convert_dataset_for_pi0.py
+The previous `scripu1.py` to `scripu6.py` / `run_steps` trajectory scripts are no longer part of the optimized workflow. The repository now focuses on reusable datasets, 20D action conversion, and Isaac Sim action evaluation.

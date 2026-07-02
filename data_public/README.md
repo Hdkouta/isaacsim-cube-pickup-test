@@ -13,5 +13,5 @@ Included folders:
 Notes:
 
 - These files are copied from C:\VScode\Yoshida_script.
-- Script/code files are in the repository root folders (run_steps, eval, data_tools, etc.).
+- Script/code files are in the repository root folders (`eval`, `data_tools`, `bridge`, `run`, etc.).
 - This snapshot is intended for browsing and analysis on GitHub.

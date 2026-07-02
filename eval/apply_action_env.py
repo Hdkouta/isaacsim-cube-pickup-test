@@ -560,7 +560,10 @@ def load_config():
 
 def load_initial_data():
     if not INITIAL_FILE.exists():
-        raise RuntimeError(f"initial file not found: {INITIAL_FILE}. Run scripu1.py first.")
+        raise RuntimeError(
+            f"initial file not found: {INITIAL_FILE}. "
+            "Create or restore the ShadowHand/Cube start-state JSON before evaluation."
+        )
     data = json.loads(INITIAL_FILE.read_text(encoding="utf-8-sig"))
     required = ["hand_translate", "cube_translate"]
     missing = [key for key in required if key not in data]
@@ -799,6 +802,7 @@ def apply_shadowhand_action(action, config):
     return {
         "type": "shadowhand_20d_action",
         "schema_name": ACTION_SCHEMA_NAME,
+        "preset_name": action.get("source_payload", {}).get("preset_name"),
         "joint_count": joint_count,
         "target_hand_pos": target_pos,
         "cube_motion": cube_motion,

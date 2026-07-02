@@ -12,22 +12,21 @@ ACTION_JOINTS = [
     "THJ4", "THJ3", "THJ2", "THJ1",
 ]
 
+DEFAULT_APPROACH_DELTA = [0.002, -0.002, -0.002]
+
 PRESET_VECTORS = {
     "approach_only": [0.0] * 17,
     "preshape": [8, 12, 8, 10, 16, 12, 8, 12, 8, 4, 8, 12, 8, 18, 20, 18, 14],
     "thumb_middle_contact": [8, 12, 8, 22, 30, 24, 8, 12, 8, 4, 8, 12, 8, 30, 34, 32, 24],
-    "support_contact": [10, 14, 10, 22, 30, 24, 10, 14, 10, 6, 12, 16, 12, 30, 34, 32, 24],
-    "final_light_contact": [12, 16, 12, 26, 34, 28, 12, 16, 12, 6, 12, 16, 12, 34, 38, 36, 28],
-    "final_hold": [14, 18, 14, 30, 38, 32, 14, 18, 14, 8, 16, 20, 16, 38, 42, 40, 32],
+    "support_contact": [10, 14, 10, 22, 30, 24, 10, 14, 10, 5, 10, 14, 10, 30, 34, 32, 24],
+    "final_light_contact": [12, 16, 12, 26, 34, 26, 12, 16, 12, 6, 12, 16, 12, 34, 38, 36, 28],
+    "hold_close": [14, 18, 14, 30, 38, 30, 14, 18, 14, 7, 14, 18, 14, 40, 44, 42, 32],
+    "final_hold": [14, 18, 14, 30, 38, 30, 14, 18, 14, 7, 14, 18, 14, 38, 42, 40, 32],
 }
 
 PRESET_HAND_DELTA = {
-    "approach_only": [0.002, -0.002, -0.002],
-    "preshape": [0.0, 0.0, 0.0],
-    "thumb_middle_contact": [0.0, 0.0, 0.0],
-    "support_contact": [0.0, 0.0, 0.0],
-    "final_light_contact": [0.0, 0.0, 0.0],
-    "final_hold": [0.0, 0.0, 0.0],
+    preset: list(DEFAULT_APPROACH_DELTA)
+    for preset in PRESET_VECTORS
 }
 
 
@@ -53,7 +52,7 @@ def parse_args():
         nargs=3,
         metavar=("DX", "DY", "DZ"),
         default=None,
-        help="Optional hand delta override in meters.",
+        help="Optional hand delta override in meters. Use 0 0 0 only when applying actions sequentially without reset.",
     )
     return parser.parse_args()
 
