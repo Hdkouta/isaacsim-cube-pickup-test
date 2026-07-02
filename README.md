@@ -11,7 +11,10 @@ Goal now:
 
 - bridge: Isaac Sim bridge script (run in Script Editor)
 - run: send script from VS Code to Isaac Sim
-- run_steps: main execution scripts (simple English names)
+- run_steps/pickup: pickup phase scripts (old scripu1 to scripu6)
+- run_steps/finish: hold/lift/return scripts (old scripu5a to scripu5c)
+- run_steps/tools: helper scripts (camera save, reset initial)
+- run_steps/flow: one-shot full sequence script
 - eval: apply one action and evaluate before/after
 - data_tools: merge logs and build datasets
 - configs: JSON examples and runtime JSON location
@@ -42,8 +45,8 @@ Run once in Isaac Sim Script Editor:
 Run while STOP:
 
 ```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step1_save_start_state.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step2_setup_teacher_env.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step1_save_start_state.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step2_setup_teacher_env.py
 ```
 
 In Isaac Sim: Save stage, then Play.
@@ -51,19 +54,19 @@ In Isaac Sim: Save stage, then Play.
 Run after Play:
 
 ```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step3_check_state.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step4_approach.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step5_preshape_contact.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step6_support_contact.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step7_hold.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step8_lift_try.py
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step9_return.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step3_check_state.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step4_approach.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step5_preshape_contact.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\pickup\step6_support_contact.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step7_hold.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step8_lift_try.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\finish\step9_return.py
 ```
 
 Optional camera save:
 
 ```powershell
-& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\step10_save_camera_images.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run_steps\tools\step10_save_camera_images.py
 ```
 
 ## 3) Build dataset for pi0
@@ -132,18 +135,18 @@ set_action_preset.py supports:
 
 - isaac_vscode_bridge.py -> bridge/isaac_bridge_server.py
 - send_to_isaac.py -> run/send_script_to_isaac.py
-- scripu1.py -> run_steps/step1_save_start_state.py
-- scripu2.py -> run_steps/step2_setup_teacher_env.py
-- scripu3.py -> run_steps/step3_check_state.py
-- scripu4a.py -> run_steps/step4_approach.py
-- scripu4b.py -> run_steps/step5_preshape_contact.py
-- scripu4c.py -> run_steps/step6_support_contact.py
-- scripu5a.py -> run_steps/step7_hold.py
-- scripu5b.py -> run_steps/step8_lift_try.py
-- scripu5c.py -> run_steps/step9_return.py
-- scripu6.py -> run_steps/step10_save_camera_images.py
-- scripu_run_all.py -> run_steps/run_all_steps.py
-- scripu_reset_initial.py -> run_steps/reset_hand_start_state.py
+- scripu1.py -> run_steps/pickup/step1_save_start_state.py
+- scripu2.py -> run_steps/pickup/step2_setup_teacher_env.py
+- scripu3.py -> run_steps/pickup/step3_check_state.py
+- scripu4a.py -> run_steps/pickup/step4_approach.py
+- scripu4b.py -> run_steps/pickup/step5_preshape_contact.py
+- scripu4c.py -> run_steps/pickup/step6_support_contact.py
+- scripu5a.py -> run_steps/finish/step7_hold.py
+- scripu5b.py -> run_steps/finish/step8_lift_try.py
+- scripu5c.py -> run_steps/finish/step9_return.py
+- scripu6.py -> run_steps/tools/step10_save_camera_images.py
+- scripu_run_all.py -> run_steps/flow/run_all_steps.py
+- scripu_reset_initial.py -> run_steps/tools/reset_hand_start_state.py
 - apply_shadowhand_action_env.py -> eval/apply_action_env.py
 - set_pi0_shadowhand_action.py -> eval/set_action_preset.py
 - merge_teacher_data.py -> data_tools/merge_teacher_logs.py
