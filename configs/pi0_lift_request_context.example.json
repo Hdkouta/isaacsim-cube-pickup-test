@@ -1,0 +1,18 @@
+{
+  "task": "shadowhand_cube_lift_with_pi0_policy",
+  "action_schema": "shadowhand_joint17_handdelta3_v1",
+  "expected_axis_names": [
+    "FFJ3", "FFJ2", "FFJ1",
+    "MFJ3", "MFJ2", "MFJ1",
+    "RFJ3", "RFJ2", "RFJ1",
+    "LFJ4", "LFJ3", "LFJ2", "LFJ1",
+    "THJ4", "THJ3", "THJ2", "THJ1",
+    "hand_dx", "hand_dy", "hand_dz"
+  ],
+  "units": {
+    "joint_targets": "degrees",
+    "hand_delta": "meters"
+  },
+  "stage_goal": "approach_contact_hold_lift",
+  "lift_policy_note": "Keep the cube stable while closing the hand. Use positive hand_dz only after contact/hold is stable."
+}

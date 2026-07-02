@@ -16,6 +16,7 @@ configs/action_input_test.json
 !configs/action_input_hold_example.json
 camera/
 results/policy_api/
+results/pi0_lift_sequence/
 *.log
 
 !data_public/

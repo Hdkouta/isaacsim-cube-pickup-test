@@ -170,7 +170,7 @@ Use this when fine-tuning/inference is running on a pi0 VM and Isaac Sim evaluat
 1. On the pi0 VM, start the policy API so it listens outside the VM:
 
 ```bash
-python serve_policy.py --host 0.0.0.0 --port 8000
+python3 serve_policy.py --host 0.0.0.0 --port 8000
 ```
 
 Use the actual endpoint path exposed by your server, for example `/predict` or `/act`.
@@ -232,6 +232,73 @@ If the policy API expects image paths instead of base64 image data, add:
 ```powershell
 -ImageMode path
 ```
+
+## Run a lift attempt with the fine-tuned pi0 policy
+
+Use this after the one-action API format check passes. The script repeatedly:
+
+1. captures the current Isaac Sim observation,
+2. POSTs the images/context to the pi0 policy API,
+3. validates the returned 20D action,
+4. writes `configs\action_input.json`,
+5. applies that action in Isaac Sim without resetting the scene.
+
+On the pi0 VM:
+
+```bash
+python3 serve_policy.py --host 0.0.0.0 --port 8000
+```
+
+On the Isaac Sim VM:
+
+```powershell
+cd C:\VScode\Yoshida_script
+git pull
+```
+
+Open Isaac Sim, load the ShadowHand + Cube scene, press **Play**, and run `bridge\isaac_bridge_server.py` once in the Script Editor.
+
+Then run:
+
+```powershell
+.\run\run_pi0_lift_sequence.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -Steps 6
+```
+
+If PowerShell blocks script execution, use:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run\run_pi0_lift_sequence.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -Steps 6
+```
+
+If the API expects image paths rather than base64 image data, add:
+
+```powershell
+-ImageMode path
+```
+
+The per-step policy actions are saved under:
+
+```text
+results\pi0_lift_sequence\<timestamp>\action_step_*.json
+```
+
+Evaluate the result from the merged CSV:
+
+```powershell
+$latest = Get-ChildItem C:\VScode\Yoshida_script\pi0_action_eval_merged |
+  Sort-Object Name -Descending |
+  Select-Object -First 1
+
+Import-Csv "$($latest.FullName)\pi0_eval_action_debug.csv" |
+  Select-Object run_id, behavior_label, hand_dx, hand_dy, hand_dz, cube_xy_motion_m, cube_motion_label |
+  Format-Table -AutoSize
+```
+
+For the first lift test, treat success as: API actions are applied, fingers keep contact/hold stable, `cube_xy_motion_m` stays small, and cube Z starts increasing. If the current policy was fine-tuned only on approach/contact/hold data, it may run correctly but still not learn a real lift until lift examples are added.
 
 ## Rebuild datasets from local teacher logs
 
