@@ -116,7 +116,21 @@ python .\data_tools\convert_dataset_for_pi0.py `
 C:\VScode\Yoshida_script\configs\action_input.json
 ```
 
-4. Run the predicted action in Isaac Sim:
+4. Or request a predicted 20D action from the pi0 policy API:
+
+```powershell
+.\run\connect_pi0_policy_to_isaac.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -CaptureObservation
+```
+
+This captures an Isaac Sim observation image set, POSTs it to the pi0 VM, validates the 20D response, and writes:
+
+```text
+C:\VScode\Yoshida_script\configs\action_input.json
+```
+
+5. Run the predicted action in Isaac Sim:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\apply_action_env.py
@@ -128,13 +142,13 @@ If the start-state file is missing or you intentionally changed the scene pose, 
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\save_start_state.py
 ```
 
-5. Merge evaluation logs:
+6. Merge evaluation logs:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\data_tools\merge_action_eval_logs.py
 ```
 
-6. Judge results from:
+7. Judge results from:
 
 ```text
 C:\VScode\Yoshida_script\pi0_action_eval_merged\<timestamp>\pi0_eval_action_debug.csv
@@ -148,6 +162,76 @@ Primary success criteria for the first stage:
 - approach/contact/hold sequence is consistent
 
 Do not target lift first. Lift should be added after the policy reliably produces stable approach/contact/hold actions.
+
+## Connect Isaac Sim VM to pi0 policy VM
+
+Use this when fine-tuning/inference is running on a pi0 VM and Isaac Sim evaluation is running on the Windows Isaac Sim VM.
+
+1. On the pi0 VM, start the policy API so it listens outside the VM:
+
+```bash
+python serve_policy.py --host 0.0.0.0 --port 8000
+```
+
+Use the actual endpoint path exposed by your server, for example `/predict` or `/act`.
+
+2. On the Isaac Sim VM, confirm the network route:
+
+```powershell
+Test-NetConnection <PI0_VM_IP> -Port 8000
+```
+
+3. In Isaac Sim, load the ShadowHand + Cube scene, press **Play**, and run `bridge\isaac_bridge_server.py` once in the Script Editor.
+
+4. Capture the current observation, call the pi0 API, and write `configs\action_input.json`:
+
+```powershell
+cd C:\VScode\Yoshida_script
+.\run\connect_pi0_policy_to_isaac.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -CaptureObservation
+```
+
+The wrapper calls:
+
+```powershell
+& C:\isaacsim\python.bat .\run\send_script_to_isaac.py .\eval\apply_action_env.py
+python .\run\request_pi0_policy_action.py --policy-url "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" --latest-eval-images --output-action .\configs\action_input.json
+```
+
+`request_pi0_policy_action.py` checks:
+
+```text
+ok_true
+schema_ok
+vector_len_20
+joint_targets_len_17
+hand_delta_len_3
+axis_names_len_20
+```
+
+It writes the full API request/response under `results\policy_api\<timestamp>` and writes the Isaac Sim action file to `configs\action_input.json`.
+
+5. Apply the action in Isaac Sim:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\eval\apply_action_env.py
+```
+
+Or do capture, API request, and Isaac application in one wrapper call:
+
+```powershell
+.\run\connect_pi0_policy_to_isaac.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -CaptureObservation `
+  -ApplyInIsaac
+```
+
+If the policy API expects image paths instead of base64 image data, add:
+
+```powershell
+-ImageMode path
+```
 
 ## Rebuild datasets from local teacher logs
 

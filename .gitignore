@@ -15,6 +15,7 @@ configs/action_input_test.json
 !configs/action_input_template.example.json
 !configs/action_input_hold_example.json
 camera/
+results/policy_api/
 *.log
 
 !data_public/
