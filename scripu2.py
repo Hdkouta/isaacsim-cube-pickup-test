@@ -427,17 +427,28 @@ def sanitize_filename(text):
     return text.strip("_")
 
 
-def capture_camera_rgba(camera_path, resolution=CAMERA_RESOLUTION):
+def capture_camera_rgba(camera_path, resolution=CAMERA_RESOLUTION, retries=5):
     if camera_path not in _camera_cache:
         cam = Camera(prim_path=camera_path, resolution=resolution)
         cam.initialize()
         _camera_cache[camera_path] = cam
-        wait_steps(10)
+        wait_steps(20)
 
     cam = _camera_cache[camera_path]
-    wait_steps(3)
-    rgba = cam.get_rgba()
-    arr = np.asarray(rgba)
+
+    arr = None
+    for attempt in range(retries):
+        wait_steps(5)
+        rgba = cam.get_rgba()
+        arr = np.asarray(rgba)
+
+        if arr.size > 0:
+            break
+
+        log(f"camera returned empty frame, retry {attempt + 1}/{retries}: {camera_path}")
+
+    if arr is None or arr.size == 0:
+        raise RuntimeError(f"camera returned empty frame after retries: {camera_path}")
 
     if arr.dtype != np.uint8:
         if arr.max() <= 1.0:
@@ -465,7 +476,19 @@ def save_all_camera_images(save_dir=CAMERA_SAVE_DIR, resolution=CAMERA_RESOLUTIO
 
     for camera_path in camera_paths:
         prim = stage.GetPrimAtPath(camera_path)
-        arr = capture_camera_rgba(camera_path, resolution=resolution)
+
+        try:
+            arr = capture_camera_rgba(camera_path, resolution=resolution)
+        except Exception as e:
+            log(f"camera save skipped: {camera_path} error={e}")
+            metadata["cameras"].append({
+                "name": prim.GetName(),
+                "path": camera_path,
+                "error": str(e),
+                "skipped": True,
+            })
+            continue
+
         rgb = arr[:, :, :3] if arr.shape[-1] == 4 else arr
 
         safe_name = sanitize_filename(camera_path)
@@ -522,7 +545,19 @@ def save_teacher_camera_images(step_id):
 
     for camera_path in list_all_camera_paths():
         prim = stage.GetPrimAtPath(camera_path)
-        arr = capture_camera_rgba(camera_path, resolution=CAMERA_RESOLUTION)
+
+        try:
+            arr = capture_camera_rgba(camera_path, resolution=CAMERA_RESOLUTION)
+        except Exception as e:
+            log(f"teacher camera skipped: {camera_path} error={e}")
+            saved[camera_path] = {
+                "name": prim.GetName(),
+                "path": camera_path,
+                "error": str(e),
+                "skipped": True,
+            }
+            continue
+
         rgb = arr[:, :, :3] if arr.shape[-1] == 4 else arr
 
         safe_name = sanitize_filename(camera_path)
@@ -593,4 +628,3 @@ record_teacher_step(
 
 omni.usd.get_context().save_stage()
 log("common code loaded: saved current hand/cube pose restored, hand open, all cameras ready")
-
