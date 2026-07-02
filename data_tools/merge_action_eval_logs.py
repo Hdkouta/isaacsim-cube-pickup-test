@@ -154,13 +154,26 @@ def infer_behavior_label(action):
     thj4 = as_float(joint_targets.get("THJ4"))
     thj1 = as_float(joint_targets.get("THJ1"))
 
-    if ffj3 == 8 and mfj3 == 10 and thj4 == 18:
+    def close(a, b, tol=0.5):
+        return abs(a - b) <= tol
+
+    def matches(target_ffj3, target_mfj3, target_thj4, target_thj1):
+        return (
+            close(ffj3, target_ffj3)
+            and close(mfj3, target_mfj3)
+            and close(thj4, target_thj4)
+            and close(thj1, target_thj1)
+        )
+
+    if matches(8, 10, 18, 14):
         return "approach_preshape"
-    if ffj3 == 8 and mfj3 == 22 and thj4 == 30:
+    if matches(8, 22, 30, 24):
         return "thumb_middle_contact"
-    if ffj3 == 12 and mfj3 == 26 and thj4 == 34:
+    if matches(12, 26, 34, 28):
         return "final_light_contact"
-    if ffj3 == 14 and mfj3 == 30 and thj4 == 38 and thj1 == 32:
+    if matches(14, 30, 40, 32):
+        return "hold_close"
+    if matches(14, 30, 38, 32):
         return "final_hold"
 
     return "custom_action"

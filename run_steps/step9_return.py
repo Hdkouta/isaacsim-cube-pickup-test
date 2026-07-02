@@ -60,4 +60,3 @@ log_json("after scripu5c return", {
     "hand_translate": get_translate(hand),
     "cube_translate": get_translate(cube),
 })
-

@@ -72,4 +72,3 @@ log_json("after scripu4b safe", {
     "hand_translate": get_translate(hand),
     "cube_translate": get_translate(cube),
 })
-

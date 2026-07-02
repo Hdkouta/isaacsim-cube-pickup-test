@@ -73,4 +73,3 @@ log_json("after scripu4c safe final light contact", {
     "hand_translate": get_translate(hand),
     "cube_translate": get_translate(cube),
 })
-

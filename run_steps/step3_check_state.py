@@ -35,4 +35,3 @@ record_teacher_step(
 
 log_json("status read only", status)
 print_all_cameras()
-

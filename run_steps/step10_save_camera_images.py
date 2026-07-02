@@ -12,4 +12,3 @@ print("all camera images saved")
 print("saved root:", SAVE_ROOT)
 print("saved directory:", SAVE_ROOT / metadata["timestamp"])
 print(json.dumps(metadata, ensure_ascii=False, indent=2))
-

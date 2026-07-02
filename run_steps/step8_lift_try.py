@@ -6,7 +6,7 @@ record_teacher_step(
     save_images=True,
 )
 
-log("scripu5b: small scoop-lift steps")
+log("scripu5b: lift 3mm each step")
 
 hand, hand_path = get_hand()
 cube, cube_path = get_cube()
@@ -35,7 +35,7 @@ for i in range(LIFT_STEPS):
             "total_steps": LIFT_STEPS,
         },
         note="after one small scoop-lift step",
-        save_images=False,
+        save_images=True,
     )
 
     log(f"scripu5b scoop lift step {i + 1}/{LIFT_STEPS}")

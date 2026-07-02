@@ -191,4 +191,3 @@ print(json.dumps(data, indent=2))
 
 omni.usd.get_context().save_stage()
 print("saved stage: current hand/cube pose and cube size saved")
-
