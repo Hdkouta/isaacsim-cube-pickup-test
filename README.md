@@ -55,6 +55,12 @@ Run after Play:
 
 ```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu3.py
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu_run_all.py
+```
+
+If you want to execute phases manually, run the split scripts instead:
+
+```powershell
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4a.py
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4b.py
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu4c.py
@@ -108,6 +114,7 @@ To also copy referenced JPGs into the merged folder:
 | `scripu1.py` | Save current hand/cube pose, cube scale, size, mass, and table height. |
 | `scripu2.py` | Restore saved state, define common helpers, initialize cameras, start teacher-data run. |
 | `scripu3.py` | Read-only status check. |
+| `scripu_run_all.py` | Combined approach/contact/hold/lift/return sequence with teacher-data logging. |
 | `scripu4a.py` | Approach: open hand and move to saved initial pose offset. |
 | `scripu4b.py` | Weak preshape + thumb/middle contact. |
 | `scripu4c.py` | Weak support-finger contact + final light contact. |
