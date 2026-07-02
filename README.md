@@ -69,11 +69,41 @@ Optional camera-only capture:
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu6.py
 ```
 
+## Merge teacher logs for machine learning
+
+After collecting teacher-data runs, merge all `steps.jsonl` files into one ML-ready dataset:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\merge_teacher_data.py
+```
+
+Outputs are written to:
+
+```text
+C:\VScode\Yoshida_script\teacher_data_merged\<timestamp>\
+```
+
+Generated files:
+
+| File | Purpose |
+| --- | --- |
+| `dataset.jsonl` | One training example per line. Use this first for fine-tuning. |
+| `dataset.json` | Same data as JSON array for inspection. |
+| `dataset_index.csv` | Lightweight table for checking phases, actions, cube pose, image counts. |
+| `summary.json` | Counts by run/script/phase/action and source file list. |
+
+To also copy referenced JPGs into the merged folder:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\merge_teacher_data.py --copy-images
+```
+
 ## Script roles
 
 | File | Role |
 | --- | --- |
 | `isaac_vscode_bridge.py` | Run once in Isaac Sim Script Editor. Opens localhost bridge. |
+| `merge_teacher_data.py` | Merge all teacher-data logs into ML-ready JSONL/CSV/summary files. |
 | `send_to_isaac.py` | VS Code-side sender. |
 | `scripu1.py` | Save current hand/cube pose, cube scale, size, mass, and table height. |
 | `scripu2.py` | Restore saved state, define common helpers, initialize cameras, start teacher-data run. |
@@ -105,4 +135,3 @@ The current pi0 placeholder output (`vx`, `vy`, `vz`, `gripper`) is not enough f
 ```
 
 Use the generated `steps.jsonl` plus image folder as the first imitation-learning dataset.
-
