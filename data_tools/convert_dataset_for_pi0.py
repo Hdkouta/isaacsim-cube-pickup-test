@@ -37,6 +37,22 @@ def parse_args():
         action="store_true",
         help="Write image paths relative to output JSONL directory.",
     )
+    parser.add_argument(
+        "--keep-original-image-paths",
+        action="store_true",
+        help="Do not rewrite Isaac Sim machine paths into repo-local data_public paths.",
+    )
+    parser.add_argument(
+        "--validate-images",
+        action="store_true",
+        help="Report whether every output image path exists.",
+    )
+    parser.add_argument(
+        "--repo-root",
+        type=Path,
+        default=Path.cwd(),
+        help="Repository root used when validating relative image paths.",
+    )
     return parser.parse_args()
 
 
@@ -93,11 +109,44 @@ def maybe_relpath(path_text, output_dir, enable_relative):
         return path_text
 
 
-def convert_row(item, filters, max_images, output_dir, enable_relative):
+def localize_image_path(path_text, keep_original):
+    if keep_original:
+        return path_text
+
+    normalized = str(path_text).replace("\\", "/")
+    mappings = [
+        ("C:/VScode/Yoshida_script/teacher_data/", "data_public/teacher_data/"),
+    ]
+    normalized_lower = normalized.lower()
+    for source_prefix, target_prefix in mappings:
+        if normalized_lower.startswith(source_prefix.lower()):
+            return target_prefix + normalized[len(source_prefix) :]
+    return normalized
+
+
+def validate_image_paths(rows, repo_root):
+    total_images = 0
+    missing_images = []
+    repo_root = repo_root.resolve()
+
+    for row in rows:
+        for image_path in row.get("images") or []:
+            total_images += 1
+            candidate = Path(image_path)
+            if not candidate.is_absolute():
+                candidate = repo_root / candidate
+            if not candidate.exists():
+                missing_images.append(image_path)
+
+    return total_images, missing_images
+
+
+def convert_row(item, filters, max_images, output_dir, enable_relative, keep_original_paths):
     observation = item.get("observation") or {}
     action = item.get("target_action") or {}
 
     image_paths = pick_images(observation.get("images") or {}, filters, max_images)
+    image_paths = [localize_image_path(path, keep_original_paths) for path in image_paths]
     image_paths = [maybe_relpath(path, output_dir, enable_relative) for path in image_paths]
 
     return {
@@ -142,9 +191,21 @@ def main():
             rows.append(json.loads(text))
 
     converted = [
-        convert_row(item, filters, args.max_images, output_jsonl.parent, args.relative_image_paths)
+        convert_row(
+            item,
+            filters,
+            args.max_images,
+            output_jsonl.parent,
+            args.relative_image_paths,
+            args.keep_original_image_paths,
+        )
         for item in rows
     ]
+
+    total_images = None
+    missing_images = []
+    if args.validate_images:
+        total_images, missing_images = validate_image_paths(converted, args.repo_root)
 
     with output_jsonl.open("w", encoding="utf-8") as f:
         for row in converted:
@@ -157,8 +218,23 @@ def main():
         "camera_filter": filters,
         "max_images": args.max_images,
         "relative_image_paths": args.relative_image_paths,
+        "localized_image_paths": not args.keep_original_image_paths,
     }
-    (output_jsonl.parent / "pi0_finetune_summary.json").write_text(
+    if args.validate_images:
+        summary.update(
+            {
+                "repo_root": str(args.repo_root),
+                "total_images": total_images,
+                "missing_image_count": len(missing_images),
+                "missing_images_preview": missing_images[:20],
+            }
+        )
+    if output_jsonl.name == "pi0_finetune_dataset.jsonl":
+        summary_path = output_jsonl.parent / "pi0_finetune_summary.json"
+    else:
+        summary_path = output_jsonl.with_name(f"{output_jsonl.stem}_summary.json")
+
+    summary_path.write_text(
         json.dumps(summary, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )

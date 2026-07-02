@@ -1,0 +1,13 @@
+{
+  "input_jsonl": "data_public\\shadowhand_action_dataset\\20260702_041002\\shadowhand_action_dataset.jsonl",
+  "output_jsonl": "data_public\\shadowhand_action_dataset\\20260702_041002\\pi0_finetune_dataset_local.jsonl",
+  "total_samples": 14,
+  "camera_filter": [],
+  "max_images": 8,
+  "relative_image_paths": false,
+  "localized_image_paths": true,
+  "repo_root": "C:\\Users\\吉田昂太\\.copilot\\chats\\7182de49-90ed-4746-bd54-90dc9458b226\\isaacsim-cube-pickup-test",
+  "total_images": 112,
+  "missing_image_count": 0,
+  "missing_images_preview": []
+}

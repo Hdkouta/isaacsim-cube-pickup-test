@@ -101,6 +101,15 @@ Get-Content C:\VScode\Yoshida_script\data_public\shadowhand_action_dataset\20260
 C:\VScode\Yoshida_script\data_public\shadowhand_action_dataset\20260702_041002\pi0_finetune_dataset.jsonl
 ```
 
+If the JSONL still contains Isaac Sim machine paths such as `C:\VScode\Yoshida_script\teacher_data\...`, create a repo-local copy first:
+
+```powershell
+python .\data_tools\convert_dataset_for_pi0.py `
+  --input-jsonl .\data_public\shadowhand_action_dataset\20260702_041002\shadowhand_action_dataset.jsonl `
+  --output-jsonl .\data_public\shadowhand_action_dataset\20260702_041002\pi0_finetune_dataset_local.jsonl `
+  --validate-images
+```
+
 3. After training, write a predicted 20D action to:
 
 ```text
