@@ -24,9 +24,9 @@ except Exception:
 
 INITIAL_FILE = Path(r"C:\robot_assets\shadow_hand_initial.json")
 OUTPUT_ROOT = Path(r"C:\VScode\Yoshida_script\pi0_action_eval")
-CONFIG_FILE = Path(r"C:\VScode\Yoshida_script\pi0_action_env_config.json")
-DEFAULT_ACTION_FILE = Path(r"C:\VScode\Yoshida_script\pi0_shadowhand_action.json")
-DEFAULT_ACTION_TEMPLATE_FILE = Path(r"C:\VScode\Yoshida_script\pi0_shadowhand_action_template.json")
+CONFIG_FILE = Path(r"C:\VScode\Yoshida_script\configs\action_env_config.json")
+DEFAULT_ACTION_FILE = Path(r"C:\VScode\Yoshida_script\configs\action_input.json")
+DEFAULT_ACTION_TEMPLATE_FILE = Path(r"C:\VScode\Yoshida_script\configs\action_input_template.json")
 
 ACTION_SCHEMA_NAME = "shadowhand_joint17_handdelta3_v1"
 TASK_INSTRUCTION = "control the ShadowHand to approach, contact, and hold the cube"

@@ -10,7 +10,10 @@ RECV_TIMEOUT_SEC = 600
 def main():
     if len(sys.argv) < 2:
         print("usage:")
-        print(r"& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\scripu2.py")
+        print(
+            r"& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py "
+            r"C:\VScode\Yoshida_script\run_steps\step2_setup_teacher_env.py"
+        )
         raise SystemExit(1)
 
     script_path = Path(sys.argv[1])

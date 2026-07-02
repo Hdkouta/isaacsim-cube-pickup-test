@@ -7,7 +7,12 @@ teacher_data_merged/
 shadowhand_action_dataset/
 pi0_action_eval/
 pi0_action_eval_merged/
-pi0_action_env_config.json
-pi0_shadowhand_action*.json
+configs/action_env_config.json
+configs/action_input.json
+configs/action_input_template.json
+configs/action_input_test.json
+!configs/action_env_config.example.json
+!configs/action_input_template.example.json
+!configs/action_input_hold_example.json
 camera/
 *.log

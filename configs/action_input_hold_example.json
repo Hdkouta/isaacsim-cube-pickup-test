@@ -1,0 +1,24 @@
+{
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "preset_name": "final_hold",
+  "joint_targets": {
+    "FFJ3": 14,
+    "FFJ2": 18,
+    "FFJ1": 14,
+    "MFJ3": 30,
+    "MFJ2": 38,
+    "MFJ1": 32,
+    "RFJ3": 14,
+    "RFJ2": 18,
+    "RFJ1": 14,
+    "LFJ4": 8,
+    "LFJ3": 16,
+    "LFJ2": 20,
+    "LFJ1": 16,
+    "THJ4": 38,
+    "THJ3": 42,
+    "THJ2": 40,
+    "THJ1": 32
+  },
+  "hand_delta": [0.0, 0.0, 0.0]
+}
