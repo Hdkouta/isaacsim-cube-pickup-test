@@ -211,6 +211,30 @@ Run `apply_shadowhand_action_env.py` again to apply the action. It saves before/
 C:\VScode\Yoshida_script\pi0_action_eval\<run_id>\eval_steps.jsonl
 ```
 
+After several action evaluations, merge the `eval_steps.jsonl` logs:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\merge_pi0_action_eval.py
+```
+
+Outputs are written to:
+
+```text
+C:\VScode\Yoshida_script\pi0_action_eval_merged\<timestamp>\
+```
+
+Generated files:
+
+| File | Purpose |
+| --- | --- |
+| `pi0_eval_dataset.jsonl` | One after-action evaluation sample per line. |
+| `pi0_eval_index.csv` | Quick comparison of behavior label, hand delta, cube motion, image counts, and run folder. |
+| `pi0_eval_action_debug.csv` | Full 20D action vector expanded into columns. |
+| `summary.json` | Counts by behavior and stable/large-push labels. |
+| `preview.txt` | Human-readable action-result summary. |
+
+Use `--copy-images` if you also want before/after JPGs copied into the merged output.
+
 ## Script roles
 
 | File | Role |
@@ -218,6 +242,7 @@ C:\VScode\Yoshida_script\pi0_action_eval\<run_id>\eval_steps.jsonl
 | `apply_shadowhand_action_env.py` | New pi0/VLA evaluation environment. Resets Isaac Sim, prepares cameras/physics, applies one 20D ShadowHand action JSON, and logs before/after results. |
 | `isaac_vscode_bridge.py` | Run once in Isaac Sim Script Editor. Opens localhost bridge. |
 | `merge_teacher_data.py` | Merge all teacher-data logs into ML-ready JSONL/CSV/summary files. |
+| `merge_pi0_action_eval.py` | Merge `pi0_action_eval\<run_id>\eval_steps.jsonl` files into comparison CSV/JSON for pi0 action evaluation. |
 | `prepare_shadowhand_action_dataset.py` | Convert teacher logs into 20D ShadowHand image-state -> action samples for initial pi0/VLA fine-tuning. |
 | `send_to_isaac.py` | VS Code-side sender. |
 | `scripu1.py` | Save current hand/cube pose, cube scale, size, mass, and table height. |
