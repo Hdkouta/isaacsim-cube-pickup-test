@@ -5,5 +5,8 @@ venv/
 teacher_data/
 teacher_data_merged/
 shadowhand_action_dataset/
+pi0_action_eval/
+pi0_action_env_config.json
+pi0_shadowhand_action*.json
 camera/
 *.log

@@ -144,10 +144,78 @@ Later, when lift behavior is ready to train, include lift steps explicitly:
 & C:\isaacsim\python.bat C:\VScode\Yoshida_script\prepare_shadowhand_action_dataset.py --include-lift-steps
 ```
 
+## Evaluate a 20D pi0/ShadowHand action in Isaac Sim
+
+The old lift-oriented scripts remain separate (`scripu5b.py` and `scripu_run_all.py`). For the new first-stage goal, use `apply_shadowhand_action_env.py`. It prepares the Isaac Sim scene for image-state -> ShadowHand action evaluation and optionally applies one 20D action JSON.
+
+First run it once to reset/setup the environment and write templates:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\send_to_isaac.py C:\VScode\Yoshida_script\apply_shadowhand_action_env.py
+```
+
+This creates:
+
+```text
+C:\VScode\Yoshida_script\pi0_action_env_config.json
+C:\VScode\Yoshida_script\pi0_shadowhand_action_template.json
+C:\VScode\Yoshida_script\pi0_action_eval\<run_id>\
+```
+
+Then write or copy a pi0 action to:
+
+```text
+C:\VScode\Yoshida_script\pi0_shadowhand_action.json
+```
+
+Accepted action formats:
+
+```json
+{
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "vector": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.002, -0.002, -0.002]
+}
+```
+
+or:
+
+```json
+{
+  "schema_name": "shadowhand_joint17_handdelta3_v1",
+  "joint_targets": {
+    "FFJ3": 12,
+    "FFJ2": 16,
+    "FFJ1": 12,
+    "MFJ3": 26,
+    "MFJ2": 34,
+    "MFJ1": 26,
+    "RFJ3": 12,
+    "RFJ2": 16,
+    "RFJ1": 12,
+    "LFJ4": 6,
+    "LFJ3": 12,
+    "LFJ2": 16,
+    "LFJ1": 12,
+    "THJ4": 34,
+    "THJ3": 38,
+    "THJ2": 36,
+    "THJ1": 28
+  },
+  "hand_delta": [0.0, 0.0, 0.0]
+}
+```
+
+Run `apply_shadowhand_action_env.py` again to apply the action. It saves before/after images, state, the applied 20D vector, and cube motion to:
+
+```text
+C:\VScode\Yoshida_script\pi0_action_eval\<run_id>\eval_steps.jsonl
+```
+
 ## Script roles
 
 | File | Role |
 | --- | --- |
+| `apply_shadowhand_action_env.py` | New pi0/VLA evaluation environment. Resets Isaac Sim, prepares cameras/physics, applies one 20D ShadowHand action JSON, and logs before/after results. |
 | `isaac_vscode_bridge.py` | Run once in Isaac Sim Script Editor. Opens localhost bridge. |
 | `merge_teacher_data.py` | Merge all teacher-data logs into ML-ready JSONL/CSV/summary files. |
 | `prepare_shadowhand_action_dataset.py` | Convert teacher logs into 20D ShadowHand image-state -> action samples for initial pi0/VLA fine-tuning. |
