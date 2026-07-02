@@ -1,0 +1,25 @@
+{
+  "task": "shadowhand_cube_scripu1_to_6_with_pi0_policy",
+  "action_schema": "shadowhand_joint17_handdelta3_v1",
+  "expected_axis_names": [
+    "FFJ3", "FFJ2", "FFJ1",
+    "MFJ3", "MFJ2", "MFJ1",
+    "RFJ3", "RFJ2", "RFJ1",
+    "LFJ4", "LFJ3", "LFJ2", "LFJ1",
+    "THJ4", "THJ3", "THJ2", "THJ1",
+    "hand_dx", "hand_dy", "hand_dz"
+  ],
+  "units": {
+    "joint_targets": "degrees",
+    "hand_delta": "meters"
+  },
+  "legacy_mapping": {
+    "scripu1": "save current ShadowHand/Cube start state",
+    "scripu2": "reset/setup teacher env, open hand, lock wrist",
+    "scripu3": "check current state and capture observation",
+    "scripu4": "approach hand toward cube",
+    "scripu5": "weak preshape and thumb/middle light contact",
+    "scripu6": "add support fingers and final light contact"
+  },
+  "stage_goal": "approach_contact_hold_without_lift"
+}

@@ -300,6 +300,85 @@ Import-Csv "$($latest.FullName)\pi0_eval_action_debug.csv" |
 
 For the first lift test, treat success as: API actions are applied, fingers keep contact/hold stable, `cube_xy_motion_m` stays small, and cube Z starts increasing. If the current policy was fine-tuned only on approach/contact/hold data, it may run correctly but still not learn a real lift until lift examples are added.
 
+## Run old scripu1 to scripu6 behavior with the fine-tuned pi0 policy
+
+Use this to reproduce the old pickup/contact sequence with pi0-generated 20D actions instead of the deleted scripted motion files.
+
+Mapping:
+
+| Old step | pi0 runner behavior |
+| --- | --- |
+| `scripu1` | optionally save current ShadowHand/Cube start state |
+| `scripu2` | reset/setup environment, open hand, lock wrist, capture observation |
+| `scripu3` | check current state and capture observation |
+| `scripu4` | request/apply pi0 approach action |
+| `scripu5` | request/apply pi0 weak preshape and thumb/middle contact actions |
+| `scripu6` | request/apply pi0 support-contact and final-light-contact actions |
+
+On the pi0 VM:
+
+```bash
+python3 serve_policy.py --host 0.0.0.0 --port 8000
+```
+
+On the Isaac Sim VM:
+
+```powershell
+cd C:\VScode\Yoshida_script
+git pull
+Test-NetConnection <PI0_VM_IP> -Port 8000
+```
+
+Open Isaac Sim, load the ShadowHand + Cube scene, press **Play**, and run `bridge\isaac_bridge_server.py` once in the Script Editor.
+
+If you changed the scene start pose and want to save it as the new reset state, include `-SaveStartState`:
+
+```powershell
+.\run\run_pi0_scripu1_to_6_sequence.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>" `
+  -SaveStartState
+```
+
+If the start state is already saved, run without `-SaveStartState`:
+
+```powershell
+.\run\run_pi0_scripu1_to_6_sequence.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>"
+```
+
+If PowerShell blocks script execution:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\run\run_pi0_scripu1_to_6_sequence.ps1 `
+  -PolicyUrl "http://<PI0_VM_IP>:8000/<POLICY_ENDPOINT>"
+```
+
+If the API expects image paths rather than base64 image data, add:
+
+```powershell
+-ImageMode path
+```
+
+Per-stage pi0 actions are saved under:
+
+```text
+results\pi0_scripu1_6_sequence\<timestamp>\*_action.json
+```
+
+Judge the run from the merged eval CSV:
+
+```powershell
+$latest = Get-ChildItem C:\VScode\Yoshida_script\pi0_action_eval_merged |
+  Sort-Object Name -Descending |
+  Select-Object -First 1
+
+Import-Csv "$($latest.FullName)\pi0_eval_action_debug.csv" |
+  Select-Object run_id, behavior_label, hand_dx, hand_dy, hand_dz, cube_xy_motion_m, cube_motion_label |
+  Format-Table -AutoSize
+```
+
+This sequence targets approach/contact/hold preparation. It does not require lift success.
+
 ## Rebuild datasets from local teacher logs
 
 If you collect more `teacher_data`, rebuild the training dataset:
