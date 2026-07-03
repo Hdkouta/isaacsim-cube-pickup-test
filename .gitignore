@@ -15,6 +15,7 @@ configs/action_input_test.json
 !configs/action_input_template.example.json
 !configs/action_input_hold_example.json
 camera/
+data/scene_report/
 results/policy_api/
 results/pi0_lift_sequence/
 results/pi0_scripu1_6_sequence/

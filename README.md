@@ -233,6 +233,39 @@ If the policy API expects image paths instead of base64 image data, add:
 -ImageMode path
 ```
 
+## Dump the current Isaac Sim environment for debugging
+
+Use this when you need to share the full simulation setup: object poses, cube size/mass, cameras, joints, drives, materials/friction, config files, and latest eval logs.
+
+In Isaac Sim, load the ShadowHand + Cube scene. Then run the bridge script once in the Script Editor:
+
+```text
+bridge\isaac_bridge_server.py
+```
+
+From PowerShell:
+
+```powershell
+cd C:\VScode\Yoshida_script
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_script_to_isaac.py C:\VScode\Yoshida_script\run\dump_scene_environment.py
+```
+
+If your local environment uses `send_to_sim.py`:
+
+```powershell
+& C:\isaacsim\python.bat C:\VScode\Yoshida_script\run\send_to_sim.py C:\VScode\Yoshida_script\run\dump_scene_environment.py
+```
+
+Output:
+
+```text
+C:\VScode\Yoshida_script\data\scene_report\<timestamp>\scene_environment_report.json
+C:\VScode\Yoshida_script\data\scene_report\<timestamp>\prim_summary.csv
+C:\VScode\Yoshida_script\data\scene_report\<timestamp>\summary.txt
+```
+
+Share `summary.txt` first. If more detail is needed, share `scene_environment_report.json`.
+
 ## Run a lift attempt with the fine-tuned pi0 policy
 
 Use this after the one-action API format check passes. The script repeatedly:
